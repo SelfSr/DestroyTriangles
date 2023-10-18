@@ -1,75 +1,100 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement; // библиотека для перехода между сценами
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D BirdRigid; // Rigidbody для птицы
-    [SerializeField] public Rigidbody2D ShootRigid; // Rigidbody для рогатки
+    private const float TEXT_OFFSET_FACTOR = 1.5f;
+    private const float PERCENTAGE = 100f;
+    private const float MULTIPLY_FORCE = 18f;
+    private const string TRIANGLE = "Triangle";
 
-    [SerializeField] public GameObject BirdPrefab; // префаб для птицы
-    [SerializeField] public Transform BirdSpawnerPos; // позиция птицы
+    [SerializeField] public Rigidbody2D point;
+    [SerializeField] private TextMeshProUGUI powerPrecentText;
+    [SerializeField] public GameObject arrowPrefab;
+    [SerializeField] private float maxVectorLength = 2.5f;
 
-    [SerializeField] private float maxDistance = 3f; // максимальный радиус окружности, куда можно увести снаряд
+    private Camera mainCamera;
+    private Vector2 worldStartMousePosition;
+    private Vector2 worldEndMousePosition;
+    private Vector2 forceDirection;
 
-    [SerializeField] private bool isPressed = false; // нажатие кнопки (изначально не нажата)
+    private float _vectorLength;
+    private bool isOneBall = true;
+    private bool isLockShootBall = false;
 
     private void Start()
     {
-        BirdRigid = GetComponent<Rigidbody2D>(); // Птица получает компонент Rigidbody2D
+        mainCamera = Camera.main;
     }
-
     private void Update()
     {
-        if (isPressed == true) // если кнопка нажата
+        if (Input.GetMouseButtonDown(0))
         {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); // новый вектор, который равен курсору мыши
-
-            if (Vector2.Distance(mousePos, ShootRigid.position) > maxDistance) // если дистанция между курсором и рогаткой больше, чем максимальная дистанция
+            SpawnBall();
+        }
+        if (Input.GetMouseButton(0))
+        {
+            AddForceBall();
+            SpawnPowerPercentText();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            ShootingBall();
+        }
+    }
+    private void SpawnBall()
+    {
+        if (isOneBall)
+        {
+            worldStartMousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(worldStartMousePosition, Vector2.zero);
+            if (hit.collider != null)
             {
-                BirdRigid.position = ShootRigid.position + (mousePos - ShootRigid.position).normalized * maxDistance; // позиция птички будет на границе окружности (чекай ролик, если не понимаешь)
+                if (hit.collider.gameObject.tag != TRIANGLE)
+                {
+                    point = Instantiate(point, worldStartMousePosition, Quaternion.identity);
+                    arrowPrefab = Instantiate(arrowPrefab, worldStartMousePosition, Quaternion.identity);
+                    arrowPrefab.SetActive(true);
+                    isLockShootBall = true;
+                }
             }
-
-            else
+        }
+    }
+    private void AddForceBall()
+    {
+        if (isOneBall)
+        {
+            worldEndMousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            _vectorLength = Mathf.Clamp(Vector2.Distance(worldStartMousePosition, worldEndMousePosition), 0f, maxVectorLength);
+            point.position = (Vector2)point.position;
+            Debug.DrawLine(worldStartMousePosition, worldEndMousePosition, Color.red);
+        }
+    }
+    private void ShootingBall()
+    {
+        if (isOneBall)
+        {
+            forceDirection = (worldStartMousePosition - worldEndMousePosition).normalized;
+            point.velocity = forceDirection * Mathf.Round(_vectorLength / maxVectorLength * PERCENTAGE) / MULTIPLY_FORCE;
+            arrowPrefab.SetActive(false);
+            if (isLockShootBall)
             {
-                BirdRigid.position = mousePos; // если превышения нет, то птичка свободно перемещается в воорброжаемой окружности
+                powerPrecentText.enabled = false;
+                isOneBall = false;
             }
         }
     }
-
-    private void OnMouseDown() // если кнопка мыши нажата (также работает на смартфоне)
+    private void SpawnPowerPercentText()
     {
-        isPressed = true; // кнопка нажата (проверка)
-        BirdRigid.isKinematic = true; // птичка становится кинематической (не болтается)
-    }
-
-    private void OnMouseUp() // если кнопка мыши отжата/отпущена (также работает на смартфоне)
-    {
-        isPressed = false; // кнопка не нажата (проверка)
-        BirdRigid.isKinematic = false; // птичка болтается на веревке
-
-        StartCoroutine(LetGo()); // запуск корутины
-    }
-
-    IEnumerator LetGo()
-    {
-        yield return new WaitForSeconds(0.1f); // ждем очень мало времени
-
-        gameObject.GetComponent<SpringJoint2D>().enabled = false; // выключается компонент "Веревка" (ну по-русски если), и птица улетает
-        this.enabled = false; // сам скрипт тоже отключается, чтобы мы не могли трогать птицу, когда она уже улетела
-        Destroy(gameObject, 5); // объект удаляется через пять секунд после того, как был отпущен
-
-        yield return new WaitForSeconds(2); // ждем две секунды
-
-        if (BirdPrefab != null) // если птицы еще есть (или грубо говоря, если количество префаборв не равно 0)
+        if (isLockShootBall)
         {
-            BirdPrefab.transform.position = BirdSpawnerPos.position; // то птички (которые находятся на земле) перемещаются на рогатку
+            RectTransformUtility.ScreenPointToWorldPointInRectangle(powerPrecentText.rectTransform, mainCamera.WorldToScreenPoint(point.position), mainCamera, out Vector3 worldPointPos);
+            powerPrecentText.rectTransform.position = new Vector3(worldPointPos.x + TEXT_OFFSET_FACTOR, worldPointPos.y, worldPointPos.z);
+            powerPrecentText.text = ConvertToPercentage(_vectorLength, maxVectorLength) + "%";
         }
-
-        else
-        {
-            SceneManager.LoadScene(0); // если птички кончились, то сцена перезапускается
-        }
+    }
+    private string ConvertToPercentage(float vectorLength, float maxVectorLength)
+    {
+        return Mathf.Round(vectorLength / maxVectorLength * PERCENTAGE).ToString();
     }
 }
