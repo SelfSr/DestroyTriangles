@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6376160396090088247}
   - component: {fileID: 1001355907}
   - component: {fileID: 2132460910641128519}
+  - component: {fileID: -3219389520164174931}
   m_Layer: 0
   m_Name: ball
   m_TagString: Player
@@ -233,6 +234,21 @@ TrailRenderer:
   m_MinVertexDistance: 0
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &-3219389520164174931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275427907022191296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c59dd49dd17e6045b6b5dc22ef862f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HardLight2D: {fileID: 2888470959456017775}
+  TrailRenderer: {fileID: 2132460910641128519}
+  SpriteRenderer: {fileID: 6272713429423439098}
 --- !u!1001 &6244891169865985027
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -362,6 +378,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d95da88540d2d6e44a0c4c40c581b24a, type: 3}
+--- !u!114 &2888470959456017775 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9133201526527734124, guid: d95da88540d2d6e44a0c4c40c581b24a, type: 3}
+  m_PrefabInstance: {fileID: 6244891169865985027}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -553817549, guid: a18d607b5ef4c264aab6c335019691c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5122148514431411752 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1278962375649610283, guid: d95da88540d2d6e44a0c4c40c581b24a, type: 3}

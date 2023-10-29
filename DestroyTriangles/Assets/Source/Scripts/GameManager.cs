@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
     private const float MULTIPLY_FORCE = 18f;
     private const string TRIANGLE = "Triangle";
     private const string TRIANGLE_DARK = "TriangleDark";
+    private const string UI = "UI";
 
     [SerializeField] public Rigidbody2D point;
     [SerializeField] private TextMeshProUGUI powerPrecentText;
@@ -55,7 +57,7 @@ public class GameManager : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(worldStartMousePosition, Vector2.zero);
             if (hit.collider != null)
             {
-                if (hit.collider.gameObject.tag != TRIANGLE && hit.collider.gameObject.tag != TRIANGLE_DARK)
+                if (hit.collider.gameObject.tag != TRIANGLE && hit.collider.gameObject.tag != TRIANGLE_DARK && !IsPointerOverUI())
                 {
                     arrowPrefab = tempArrowPrefab;
                     point = Instantiate(point, worldStartMousePosition, Quaternion.identity);
@@ -65,6 +67,10 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+    private bool IsPointerOverUI()
+    {
+        return EventSystem.current.IsPointerOverGameObject();
     }
     private void AddForceBall()
     {

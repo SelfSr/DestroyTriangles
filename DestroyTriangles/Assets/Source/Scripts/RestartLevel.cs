@@ -37,7 +37,7 @@ public class RestartLevel : MonoBehaviour
             yield return new WaitForSeconds(DELAY_COROUTINE);
         }
     }
-    private void RespawnTriangle()
+    public void RespawnTriangle()
     {
         foreach (Transform child in levelManager.levelObjects[currentLevel].transform)
             child.gameObject.SetActive(true);
@@ -45,12 +45,17 @@ public class RestartLevel : MonoBehaviour
     public void ResetBall()
     {
         arrow = GameObject.FindWithTag("Arrow");
-        currentLevel = levelManager.currentLevel;
+        currentLevel = LevelManager.currentLevel;
         gameManager.isOneBall = true;
         gameManager.isLockShootBall = false;
         Destroy(player);
         Destroy(arrow);
         gameManager.point = newPlayer;
         gameManager.arrowPrefab = newArrow;
+    }
+    public void Restart()
+    {
+        ResetBall();
+        Invoke("RespawnTriangle", 0.2f);
     }
 }

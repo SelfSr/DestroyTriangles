@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6789969693319246653}
   - component: {fileID: 6703491159137668347}
   - component: {fileID: 8556516609588679727}
+  - component: {fileID: 6624076653058512767}
   m_Layer: 0
   m_Name: Triangle
   m_TagString: Triangle
@@ -78,7 +79,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 3320aa846675e984aa2423b16ece666c, type: 3}
-  m_Color: {r: 0.7019608, g: 0.8352942, b: 0.9490197, a: 1}
+  m_Color: {r: 0.7019608, g: 0.8352942, b: 0.9490197, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -151,6 +152,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a4af34915a51bd4b89c750bb82aa98d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &6624076653058512767
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 812704691585650703}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0dd6a737c9e42054ab41a4158170341b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8787720560473176787
 GameObject:
   m_ObjectHideFlags: 0

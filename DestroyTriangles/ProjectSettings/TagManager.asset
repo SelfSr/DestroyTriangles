@@ -8,6 +8,8 @@ TagManager:
   - Default
   - TriangleDark
   - Arrow
+  - UI
+  - LevelButtonObject
   layers:
   - Default
   - TransparentFX

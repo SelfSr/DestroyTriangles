@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    private const float DELAY_COROUTINE = 0.1f;
     private const string TRIANGLE = "Triangle";
 
     [SerializeField] private GameObject[] levelObjectsArray;
@@ -13,7 +12,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelNumber;
     public Dictionary<int, GameObject> levelObjects = new Dictionary<int, GameObject>();
 
-    [HideInInspector] public int currentLevel = 1;
+    [HideInInspector] public static int currentLevel = 1;
     private bool isOneStartCoroutine = true;
 
     private void Start()
@@ -22,8 +21,6 @@ public class LevelManager : MonoBehaviour
             levelObjects.Add(i + 1, levelObjectsArray[i]);
         currentLevel = PlayerPrefs.GetInt("SelectedLevel", 1);
         SwitchObject();
-        //ActivateLevelObjects(selectedLevel);
-
     }
     private IEnumerator CheckForTrianglesWithDelay(GameObject parentObject)
     {
@@ -40,9 +37,10 @@ public class LevelManager : MonoBehaviour
                 currentLevel++;
                 isOneStartCoroutine = true;
                 restartLevelScript.ResetBall();
+                LevelController.instance.isEndGame();
                 SwitchObject();
             }
-            yield return new WaitForSeconds(DELAY_COROUTINE);
+            yield return null;
         }
     }
     private void SwitchObject()
@@ -74,16 +72,4 @@ public class LevelManager : MonoBehaviour
         if (levelObjects.ContainsKey(previousLevel))
             levelObjects[previousLevel].SetActive(false);
     }
-    //private void ActivateLevelObjects(int levelIndex)
-    //{
-    //    foreach (GameObject obj in levelObjectsArray)
-    //    {
-    //        obj.SetActive(false);
-    //    }
-    //    if (levelIndex >= 0 && levelIndex < levelObjectsArray.Length)
-    //    {
-    //        levelObjects[levelIndex].SetActive(true);
-    //    }
-    //    SwitchObject();
-    //}
 }
