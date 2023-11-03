@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4645132edefd4c74968a0c941a98fb89, type: 3}
+  m_Name: Audio Database
+  m_EditorClassIdentifier: 
+  _items:
+  - Clip: {fileID: 8300000, guid: 0eb6d51fab0a53a41be722cc7dfa3a56, type: 3}
+    Key: CollishionTriangle
+    FolderPath: Source\Sounds\
+    Name: CollishionTriangleSound.mp3
+    Preload: 1
+    _id: 558429f0-ab78-4e84-ab5b-03048e550b88
+  - Clip: {fileID: 8300000, guid: 8fd4593de314c094eae9d508de9f9e36, type: 3}
+    Key: LevelComplete
+    FolderPath: Source\Sounds\
+    Name: LevelComplete.mp3
+    Preload: 1
+    _id: fcbb870c-ed17-4715-a24b-6389cb787357

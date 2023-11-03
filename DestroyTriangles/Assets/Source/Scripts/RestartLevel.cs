@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using YG;
 
 public class RestartLevel : MonoBehaviour
 {
@@ -32,6 +33,7 @@ public class RestartLevel : MonoBehaviour
                 {
                     ResetBall();
                     RespawnTriangle();
+                    YandexGame.FullscreenShow();
                 }
             }
             yield return new WaitForSeconds(DELAY_COROUTINE);
@@ -57,5 +59,6 @@ public class RestartLevel : MonoBehaviour
     {
         ResetBall();
         Invoke("RespawnTriangle", 0.2f);
+        YandexGame.FullscreenShow();
     }
 }

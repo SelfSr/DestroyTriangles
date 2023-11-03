@@ -13,13 +13,25 @@ public class Ball : MonoBehaviour
         switch (collisionCount)
         {
             case 2:
-                ChangeColor(Color.green);
+                ChangeColor(Color.cyan);
                 break;
             case 3:
-                ChangeColor(Color.red);
+                ChangeColor(Color.blue);
                 break;
             case 4:
+                ChangeColor(Color.green);
+                break;
+            case 5:
+                ChangeColor(Color.yellow);
+                break;
+            case 6:
+                ChangeColor(Color.red);
+                break;
+            case 7:
                 ChangeColor(Color.magenta);
+                break;
+            case 8:
+                ChangeColor(Color.black);
                 break;
             default:
                 break;

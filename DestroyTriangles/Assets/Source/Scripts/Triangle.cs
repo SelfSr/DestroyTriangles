@@ -1,9 +1,10 @@
-using Unity.VisualScripting;
+using Plugins.Audio.Core;
 using UnityEngine;
 
 public class Triangle : MonoBehaviour
 {
     private Animator animator;
+    [SerializeField] private SourceAudio source;
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -13,6 +14,7 @@ public class Triangle : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             animator.SetBool("Destroy", true);
+            source.Play("CollishionTriangle");
             Invoke("ChangeVisiable", 0.2f);
         }
     }
