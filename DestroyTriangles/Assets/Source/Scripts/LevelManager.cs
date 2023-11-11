@@ -57,7 +57,7 @@ public class LevelManager : MonoBehaviour
                 YandexGame.FullscreenShow();
                 int lastScore = currentLevel;
                 if (currentLevel >= lastScore)
-                    YandexGame.NewLeaderboardScores(leaderboardYG.nameLB, currentLevel == 7 ? 6 : currentLevel);
+                    YandexGame.NewLeaderboardScores(leaderboardYG.nameLB, currentLevel == 97 ? 96 : currentLevel);
 
                 SwitchObject();
             }

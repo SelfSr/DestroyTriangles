@@ -33,6 +33,9 @@ public class Ball : MonoBehaviour
             case 8:
                 ChangeColor(Color.black);
                 break;
+            case 9:
+                collisionCount = 1;
+                break;
             default:
                 break;
         }

@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     private const float TEXT_OFFSET_FACTOR = 1.5f;
     private const float PERCENTAGE = 100f;
-    private const float MULTIPLY_FORCE = 18f;
+    private const float MULTIPLY_FORCE = 20f;
     private const string TRIANGLE = "Triangle";
     private const string TRIANGLE_DARK = "TriangleDark";
     private const string UI = "UI";
@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public Rigidbody2D point;
     [SerializeField] private TextMeshProUGUI powerPrecentText;
     [SerializeField] public GameObject arrowPrefab;
-    [SerializeField] private float maxVectorLength = 2.5f;
+    [SerializeField] private float maxVectorLength = 1.5f;
 
     private Camera mainCamera;
     private Vector2 worldStartMousePosition;
