@@ -17,7 +17,8 @@ public class BlockLevelControll : MonoBehaviour
         levelIndex = PlayerPrefs.GetInt(LEVELINDEX);
         foreach (var level in levelCounts)
             level.interactable = false;
-        UnlockLevels(levelIndex);
+        if (levelIndex != 74)
+            UnlockLevels(levelIndex);
     }
     public void LoadTo(int levelID)
     {

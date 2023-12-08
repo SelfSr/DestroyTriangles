@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 using YG;
@@ -11,11 +12,14 @@ public class RestartLevel : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private Rigidbody2D newPlayer;
     [SerializeField] private GameObject newArrow;
+    [SerializeField] public GameObject loseWindow;
+    [SerializeField] private GameObject[] UIElements;
 
     private int currentLevel;
     private Camera mainCamera;
     private GameObject player;
     private GameObject arrow;
+    private bool isOneCheckAD = true;
     private void Start()
     {
         mainCamera = Camera.main;
@@ -31,9 +35,17 @@ public class RestartLevel : MonoBehaviour
                 Vector3 viewportPosition = mainCamera.WorldToViewportPoint(player.transform.position);
                 if (viewportPosition.x < 0 || viewportPosition.x > 1 || viewportPosition.y < 0 || viewportPosition.y > 1)
                 {
-                    ResetBall();
-                    RespawnTriangle();
-                    YandexGame.FullscreenShow();
+                    if (isOneCheckAD)
+                    {
+                        foreach (GameObject ui in UIElements)
+                            ui.SetActive(false);
+
+                        AnimateSequenceLoseWindow();
+
+                        ResetBall();
+                        Invoke("ShowFullScreenAd", 1f);
+                        isOneCheckAD = false;
+                    }
                 }
             }
             yield return new WaitForSeconds(DELAY_COROUTINE);
@@ -58,7 +70,29 @@ public class RestartLevel : MonoBehaviour
     public void Restart()
     {
         ResetBall();
-        Invoke("RespawnTriangle", 0.2f);
+        Invoke("RespawnTriangle", 0.3f);
+        if (loseWindow.activeSelf == true)
+        {
+            foreach (GameObject ui in UIElements)
+                ui.SetActive(true);
+            loseWindow.SetActive(false);
+        }
+        else
+        {
+            YandexGame.FullscreenShow();
+        }
+    }
+    private void AnimateSequenceLoseWindow()
+    {
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(loseWindow.transform.DOScale(1, 0))
+            .Join(loseWindow.GetComponent<CanvasGroup>().DOFade(0, 0))
+            .Append(loseWindow.GetComponent<CanvasGroup>().DOFade(1, 0.2f))
+            .OnStart(() => loseWindow.SetActive(true));
+    }
+    private void ShowFullScreenAd()
+    {
         YandexGame.FullscreenShow();
+        isOneCheckAD = true;
     }
 }

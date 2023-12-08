@@ -2,10 +2,9 @@ using Plugins.Audio.Core;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 using YG;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -14,20 +13,20 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject[] levelObjectsArray;
     [SerializeField] private RestartLevel restartLevelScript;
     [SerializeField] private TextMeshProUGUI levelNumber;
-    [SerializeField] LeaderboardYG leaderboardYG;
 
     [SerializeField] private Animator animatorPanel;
     [SerializeField] private SourceAudio source;
+    private Coroutine checkForTrianglesWithDelay;
 
     public Dictionary<int, GameObject> levelObjects = new Dictionary<int, GameObject>();
-
     [HideInInspector] public static int currentLevel = 1;
 
     private bool isOneStartCoroutine = true;
 
+    [SerializeField] private Timer timerScript;
+
     private void OnEnable() => YandexGame.RewardVideoEvent += Rewarded;
     private void OnDisable() => YandexGame.RewardVideoEvent -= Rewarded;
-
     private void Start()
     {
         for (int i = 0; i < levelObjectsArray.Length; i++)
@@ -47,19 +46,8 @@ public class LevelManager : MonoBehaviour
             }
             if (!foundTriangle)
             {
-                currentLevel++;
-                isOneStartCoroutine = true;
-
-                restartLevelScript.ResetBall();
                 ShowGreenpanel();
-                LevelController.instance.isEndGame();
-
-                YandexGame.FullscreenShow();
-                int lastScore = currentLevel;
-                if (currentLevel >= lastScore)
-                    YandexGame.NewLeaderboardScores(leaderboardYG.nameLB, currentLevel == 97 ? 96 : currentLevel);
-
-                SwitchObject();
+                ChangeOnNextLevel();
             }
             yield return null;
         }
@@ -73,8 +61,9 @@ public class LevelManager : MonoBehaviour
             levelNumber.text = currentLevel.ToString();
             if (isOneStartCoroutine)
             {
-                StopAllCoroutines();
-                StartCoroutine(CheckForTrianglesWithDelay(levelObjects[currentLevel]));
+                if (checkForTrianglesWithDelay != null)
+                    StopCoroutine(checkForTrianglesWithDelay);
+                checkForTrianglesWithDelay = StartCoroutine(CheckForTrianglesWithDelay(levelObjects[currentLevel]));
                 isOneStartCoroutine = false;
             }
         }
@@ -99,12 +88,20 @@ public class LevelManager : MonoBehaviour
     }
     private void SkiplevelButton()
     {
+        timerScript.StartTimer();
+        ChangeOnNextLevel();
+    }
+    public void ChangeOnNextLevel()
+    {
         currentLevel++;
         isOneStartCoroutine = true;
         restartLevelScript.ResetBall();
         LevelController.instance.isEndGame();
-        YandexGame.NewLeaderboardScores(leaderboardYG.nameLB, currentLevel);
-        SwitchObject();
+
+        if (currentLevel == 73)
+            SceneManager.LoadScene(0);
+        else
+            SwitchObject();
     }
     private void ShowGreenpanel()
     {

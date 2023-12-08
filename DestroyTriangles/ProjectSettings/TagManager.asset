@@ -10,6 +10,7 @@ TagManager:
   - Arrow
   - UI
   - LevelButtonObject
+  - TimerManager
   layers:
   - Default
   - TransparentFX

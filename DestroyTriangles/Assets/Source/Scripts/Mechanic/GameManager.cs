@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI powerPrecentText;
     [SerializeField] public GameObject arrowPrefab;
     [SerializeField] private float maxVectorLength = 1.5f;
+    [SerializeField] private RestartLevel restartLevelScript;
 
     private Camera mainCamera;
     private Vector2 worldStartMousePosition;
@@ -36,7 +37,8 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            SpawnBall();
+            if (restartLevelScript.loseWindow.activeSelf == false)
+                SpawnBall();
         }
         if (Input.GetMouseButton(0))
         {
